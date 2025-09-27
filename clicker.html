@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Click Racer — /root/overclock</title>
+<style>
+  :root{
+    --bg:#020403; --panel:#051013; --neon:#39ff14; --muted:#163022; --accent:#66ffb2;
+  }
+  html,body{height:100%;margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    background:linear-gradient(180deg,#00110b 0%, #000 200%);color:var(--neon);}
+  .app{max-width:920px;margin:22px auto;padding:18px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    box-shadow:0 8px 30px rgba(0,0,0,0.7);border:1px solid rgba(57,255,20,0.04)}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  h1{margin:0;font-size:20px;color:var(--neon);letter-spacing:0.6px}
+  .sub{font-size:12px;color:#75ff9a;opacity:0.75}
+  .layout{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:16px}
+  .panel{background:linear-gradient(180deg,rgba(5,16,19,0.8),rgba(2,6,8,0.6));border-radius:8px;padding:12px;border:1px solid rgba(57,255,20,0.03)}
+  #playArea{padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  #track{position:relative;width:760px;height:76px;border-radius:8px;border:1px solid rgba(57,255,20,0.06);
+    background: repeating-linear-gradient(90deg, rgba(0,0,0,0.25) 0 8px, rgba(0,0,0,0.12) 8px 16px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);overflow:hidden;}
+  #cube{position:absolute;left:0;top:8px;width:60px;height:60px;border-radius:6px;
+    background:linear-gradient(180deg,#0b8a3e,#04321d);
+    box-shadow:0 8px 22px rgba(0,255,100,0.06),0 1px 0 rgba(255,255,255,0.03);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#001b0a;font-size:14px;}
+  .hud{width:760px;display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .btn{background:transparent;border:1px solid rgba(57,255,20,0.15);padding:10px 16px;border-radius:8px;color:var(--neon);cursor:pointer;font-weight:700}
+  .btn.primary{background:linear-gradient(90deg,rgba(57,255,20,0.06),rgba(102,255,178,0.04));border:1px solid rgba(57,255,20,0.28)}
+  input[type="text"]{background:transparent;border:1px solid rgba(57,255,20,0.06);color:var(--neon);padding:8px;border-radius:6px;width:100%}
+  #leaderboard{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+  .scoreRow{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;
+    background:linear-gradient(90deg, rgba(57,255,20,0.02), rgba(0,0,0,0));
+    border:1px solid rgba(57,255,20,0.03)}
+  footer{margin-top:12px;font-size:12px;color:#75ff9a;opacity:0.8;text-align:center}
+  #countdown{position:absolute;top:20px;left:50%;transform:translateX(-50%);font-size:26px;font-weight:700;color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Click Racer — <span class="sub">/root/overclock</span></h1>
+  </header>
+  <div class="layout">
+    <div class="panel">
+      <div id="playArea">
+        <div id="track">
+          <div id="cube">/bin</div>
+          <div id="countdown"></div>
+        </div>
+        <div class="hud">
+          <button class="btn primary" id="startBtn">Start Race</button>
+          <span id="status"></span>
+        </div>
+      </div>
+    </div>
+    <div class="panel right">
+      <h3>Nickname</h3>
+      <input type="text" id="nicknameInput" placeholder="Enter nickname">
+      <h3>Leaderboard</h3>
+      <div id="leaderboard"></div>
+    </div>
+  </div>
+  <footer>Scores & multiplayer powered by Firebase</footer>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, push, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+// 🔧 Replace with your Firebase config
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const cube = document.getElementById('cube');
+const countdownEl = document.getElementById('countdown');
+const statusEl = document.getElementById('status');
+const startBtn = document.getElementById('startBtn');
+const nicknameInput = document.getElementById('nicknameInput');
+const lbDiv = document.getElementById('leaderboard');
+
+let playerName = localStorage.getItem('cr_nickname') || "";
+let startTime, anim;
+
+// Prefill nickname if saved
+nicknameInput.value = playerName;
+
+// Save nickname
+nicknameInput.addEventListener('change',()=>{
+  playerName = nicknameInput.value.trim() || "anon";
+  localStorage.setItem('cr_nickname', playerName);
+});
+
+// Start race button
+startBtn.onclick = ()=> {
+  if (!playerName) { alert("Enter a nickname first"); return; }
+  startCountdown(startRace);
+};
+
+// Countdown
+function startCountdown(cb){
+  let count = 3;
+  countdownEl.textContent = count;
+  let interval = setInterval(()=>{
+    count--;
+    if(count>0){
+      countdownEl.textContent = count;
+    } else {
+      clearInterval(interval);
+      countdownEl.textContent = "GO!";
+      setTimeout(()=>{ countdownEl.textContent=""; cb(); }, 800);
+    }
+  }, 1000);
+}
+
+// Race
+function startRace(){
+  let x = 0;
+  cube.style.left = "0px";
+  startTime = performance.now();
+  function step(ts){
+    let elapsed = ts - startTime;
+    x = Math.min(700, elapsed/5); // speed
+    cube.style.left = x+"px";
+    if(x<700){
+      anim = requestAnimationFrame(step);
+    } else {
+      let finish = (performance.now()-startTime)/1000;
+      statusEl.textContent = `Finished in ${finish.toFixed(2)}s`;
+      saveScore(playerName, finish);
+    }
+  }
+  anim = requestAnimationFrame(step);
+}
+
+// Save score to Firebase
+function saveScore(player, time){
+  const scoresRef = ref(db, "scores/" + player);
+  push(scoresRef, { time: time, at: Date.now() });
+}
+
+// Render leaderboard
+const lbRef = ref(db, "scores");
+onValue(lbRef, (snap)=>{
+  const data = snap.val() || {};
+  let all = [];
+  for (let p in data){
+    let arr = Object.values(data[p]).map(s=>s.time);
+    let best = Math.min(...arr);
+    all.push({name:p, best});
+  }
+  all.sort((a,b)=>a.best-b.best);
+  lbDiv.innerHTML = "";
+  all.slice(0,10).forEach((row,i)=>{
+    let div = document.createElement("div");
+    div.className="scoreRow";
+    div.innerHTML = `<span>${i+1}. ${row.name}</span><span>${row.best.toFixed(2)}s</span>`;
+    lbDiv.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>
