@@ -4,7 +4,7 @@
   <style>
     body {
       display: flex;
-      
+      justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
@@ -12,8 +12,6 @@
       background: #000;
       color: white;
       font-family: 'Arial', sans-serif;
-      background-image: url('fdg.png');
-
     }
     .char {
       position: absolute;
@@ -21,10 +19,19 @@
       opacity: 1;
       transition: transform 1s ease-out, opacity 1s ease-out;
     }
-
+    body {
+      background-image: url('');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center top;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
   </style>
 </head>
 <body>
+<img src="fdg.png" alt="">
   <script>
     const sentence = "Freeze-Dried Goodies!";
     const container = document.body;
