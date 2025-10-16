@@ -1,1 +1,77 @@
-skittles are the best inm the worl in they are fereexze dried
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+    .char {
+      position: absolute;
+      font-size: 24px;
+      opacity: 1;
+      transition: transform 1s ease-out, opacity 1s ease-out;
+    }
+    body {
+      background-image: url('images/test.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const sentence = "Freeze-Dried Goodies!";
+    const container = document.body;
+    let chars = [];
+
+    function createSentence() {
+      chars.forEach(char => char.remove());
+      chars = [];
+      let x = 20;
+      [...sentence].forEach((char, i) => {
+        const elem = document.createElement('div');
+        elem.textContent = char;
+        elem.className = 'char';
+        elem.style.left = `${x}%`;
+        elem.style.top = '5%';
+        container.appendChild(elem);
+        chars.push(elem);
+        x += 1;
+      });
+    }
+
+    function explode() {
+      chars.forEach(elem => {
+        const angle = Math.random() * 360;
+        const distance = 100 + Math.random() * 400;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        elem.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random() * 360}deg)`;
+        elem.style.opacity = 0;
+      });
+    }
+
+    function reappear() {
+      createSentence(); // Reform sentence
+      setTimeout(explode, 4000); // Explode again
+    }
+
+    // Initialize
+    createSentence();
+    setTimeout(explode, 5000);
+    setInterval(reappear, 8000); // Repeat every 8 seconds
+  </script>
+</body>
+</html>   
