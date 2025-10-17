@@ -9,7 +9,30 @@ body{
 </head>
 <h1 style="font-size: 100px;">Freeze Dried Goodies!</h1>
 <h1 style="font-size: 40px;">Joke of the day:</h1>
-<h1 style="font-size: 40px;">What do you get when you cross candy with pizza? Skittle Caesars!</h1>
+<!--<h1 style="font-size: 40px;">What do you get when you cross candy with pizza? Skittle Caesars!</h1>-->
+
+
+<h1 style="font-size: 40px;" id="result"></h1>
+
+  <script>
+    const items = ["What do you get when you cross candy with pizza? Skittle Caesars!", "What is a construction workers favorite candy? A Cand Crane!"];
+    const resultElement = document.getElementById("result");
+    const today = new Date().toDateString();
+    let savedDate = localStorage.getItem("lastDate");
+    let savedItem = localStorage.getItem("dailyItem");
+
+    // Check if it's a new day
+    if (!savedDate || savedDate !== today) {
+      const randomIndex = Math.floor(Math.random() * items.length);
+      savedItem = items[randomIndex];
+      localStorage.setItem("dailyItem", savedItem);
+      localStorage.setItem("lastDate", today);
+    }
+
+    resultElement.textContent = savedItem;
+  </script>
+
+
 
 <img src="fdg.png">
 <p style="font-size: 30px;">We currently have:</p>
