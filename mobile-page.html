@@ -1,8 +1,58 @@
-<a src="freezedriedgoodies.html">
-<!--<script>
-/*
-if (screen.width <= 700) {
-    document.location = "mobile-page.html";
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+  background-color: #B266FF;
+  position: absolute
+}
+.container {
+  width: 100%;
+  max-width: 1200px; /* Limits width on large screens */
+  margin: 0 auto; /* Centers the container */
+  padding: 0 15px; /* Adds side padding on small screens */
 }   
-*/
-</script>-->
+</style>
+<head>
+<link rel="icon" href="path/to/your/image.png" type="fdg.png" >   
+</head>
+<div class="container">
+<h1 style="font-size: 50px;">Freeze Dried Goodies!</h1>
+<h1 style="font-size: 20px;">Joke of the day:</h1>
+<!--<h1 style="font-size: 40px;">What do you get when you cross candy with pizza? Skittle Caesars!</h1>-->
+
+
+<h1 style="font-size: 20px;" id="result"></h1>
+
+  <script>
+    const items = ["What do you get when you cross candy with pizza? Skittle Caesars!", "What is a construction workers favorite candy? A Cand Crane!"];
+    const resultElement = document.getElementById("result");
+    const today = new Date().toDateString();
+    let savedDate = localStorage.getItem("lastDate");
+    let savedItem = localStorage.getItem("dailyItem");
+
+    // Check if it's a new day
+    if (!savedDate || savedDate !== today) {
+      const randomIndex = Math.floor(Math.random() * items.length);
+      savedItem = items[randomIndex];
+      localStorage.setItem("dailyItem", savedItem);
+      localStorage.setItem("lastDate", today);
+    }
+
+    resultElement.textContent = savedItem;
+  </script>
+
+
+
+<img src="fdg.png" width=160px height=120px>
+<p style="font-size: 15px;">We currently have:</p>
+<ul style="font-size: 15px;">
+  <li>Freeze dried Skittles</li>
+  <li>Freeze dried apple sauce</li>
+  <li>Freeze dried pinapple</li>
+  <li>Freeze dried Jolly Ranchers</li>
+  <li>Freeze dried Gummy Worms</li>
+</ul>   
+<p style="font-size: 15px;">For comments or suggestions, email: freezedriedgoodies@proton.me</p>
+<p style="font-size: 15px;">Please give us a 1-10 rating in the email and what we can improve</p>
+
+<br>
+</div>
