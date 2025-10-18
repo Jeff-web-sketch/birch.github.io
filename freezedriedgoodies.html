@@ -3,15 +3,23 @@ if (screen.width <= 700) {
     document.location = "mobile-page.html";
 }   
 </script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{
   background-color: #B266FF;
   position: absolute
 }
+.container {
+  width: 100%;
+  max-width: 1200px; /* Limits width on large screens */
+  margin: 0 auto; /* Centers the container */
+  padding: 0 15px; /* Adds side padding on small screens */
+}   
 </style>
 <head>
 <link rel="icon" href="path/to/your/image.png" type="fdg.png">   
 </head>
+<div class="container">
 <h1 style="font-size: 100px;">Freeze Dried Goodies!</h1>
 <h1 style="font-size: 40px;">Joke of the day:</h1>
 <!--<h1 style="font-size: 40px;">What do you get when you cross candy with pizza? Skittle Caesars!</h1>-->
@@ -52,3 +60,4 @@ body{
 <p style="font-size: 30px;">Please give us a 1-10 rating in the email and what we can improve</p>
 
 <br>
+</div>
