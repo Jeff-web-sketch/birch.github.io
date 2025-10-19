@@ -16,6 +16,9 @@ body{
   max-width: 1200px; /* Limits width on large screens */
   margin: 0 auto; /* Centers the container */
   padding: 0 15px; /* Adds side padding on small screens */
+} 
+.container-fluid {
+  display: flex;
 }   
 img {
 }
@@ -41,7 +44,7 @@ h3 {
   border-radius: 10px;
 }
 .transparentBox2 {
-  width: 600px;
+  width: 900px;
   height: 300px;
   margin: 30px;
   background-color: rgba(255, 255, 255, 0.5); /* White background with 60% opacity */
@@ -84,8 +87,9 @@ h3 {
 
     resultElement.textContent = savedItem;
   </script>
- 
-<div class="transparentBox">
+<div class="container-fluid">
+
+<div class="transparentBox element1">
 <p style="font-size: 30px;">We currently have:</p>
 <ul style="font-size: 30px;">
   <li>Freeze dried Skittles</li>
@@ -93,13 +97,19 @@ h3 {
   <li>Freeze dried pinapple</li>
   <li>Freeze dried Jolly Ranchers</li>
   <li>Freeze dried Gummy Worms</li>
-</ul>  </div>   
+</ul>  
+</div> 
 
+<div class="transparentBox element2">
+<p style="font-size: 30px;">Come to the craft fair next fall!</p>  
+</div> 
+
+</div>
 <!--<img src="fdg.png" width=800px height=600px>-->
 <div class="transparentBox2"
 <h3 style="font-size: 30px;">For comments or suggestions, email: freezedriedgoodies@proton.me</h3>
 <h3 style="font-size: 30px;">Please give us a 1-10 rating in the email and what we can improve</h3>
-<h3 style="font-size: 20px;">© 2025 by Ab&C Little co. Est. 2024</h3>
+<h3 style="font-size: 20px;">© 2025 by <em>BR freeze drying co.</em> Est. 2024</h3>
 </div>
 <br>
 </div>
