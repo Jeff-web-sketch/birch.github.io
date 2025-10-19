@@ -1,8 +1,15 @@
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+
+if (screen.width <= 700) {
+    document.location = "mobile-page.html";
+}   
+
+</script>
 <style>
 body{
-  background-color: #B266FF;
+  <!--background-color: #B266FF;-->
   position: absolute
+  transition: background-color 0.9s ease;
 }
 .container {
   width: 100%;
@@ -10,17 +17,47 @@ body{
   margin: 0 auto; /* Centers the container */
   padding: 0 15px; /* Adds side padding on small screens */
 }   
+img {
+}
+html {
+  background-image: url('bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+}   
+h3 {
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #3f3a3a;
+    color: ##423b3b;
+}   
+.transparentBox {
+  width: 400px;
+  height: 300px;
+  margin: 30px;
+  background-color: rgba(255, 255, 255, 0.5); /* White background with 60% opacity */
+  border: 1px #cbc1c1;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.transparentBox p {
+  margin: 5%;
+  font-weight: bold;
+  color: #000000;
+  font-size: 20px;
+}   
 </style>
 <head>
 <link rel="icon" href="path/to/your/image.png" type="fdg.png" >   
 </head>
 <div class="container">
-<h1 style="font-size: 50px;">Freeze Dried Goodies!</h1>
-<h1 style="font-size: 20px;">Joke of the day:</h1>
+<h3 style="font-size: 100px;">Freeze Dried Goodies!</h3>
+<h3 style="font-size: 40px;">Joke of the day:</h3>
 <!--<h1 style="font-size: 40px;">What do you get when you cross candy with pizza? Skittle Caesars!</h1>-->
 
 
-<h1 style="font-size: 20px;" id="result"></h1>
+<h3 style="font-size: 40px;" id="result"></h3>
 
   <script>
     const items = ["What do you get when you cross candy with pizza? Skittle Caesars!", "What is a construction workers favorite candy? A Cand Crane!", "What candy do you eat on the playground? Recess pieces!","What country did candy come from? Sweeten!"];
@@ -39,21 +76,22 @@ body{
 
     resultElement.textContent = savedItem;
   </script>
-
-
-
-<img src="fdg.png" width=160px height=120px>
-<p style="font-size: 15px;">We currently have:</p>
-<ul style="font-size: 15px;">
+ 
+<div class="transparentBox">
+<p style="font-size: 30px;">We currently have:</p>
+<ul style="font-size: 30px;">
   <li>Freeze dried Skittles</li>
   <li>Freeze dried apple sauce</li>
   <li>Freeze dried pinapple</li>
   <li>Freeze dried Jolly Ranchers</li>
   <li>Freeze dried Gummy Worms</li>
-</ul>   
-<p style="font-size: 15px;">For comments or suggestions, email: freezedriedgoodies@proton.me</p>
-<p style="font-size: 15px;">Please give us a 1-10 rating in the email and what we can improve</p>
-<p style="font-size: 7.5px;">© 2025 by Ab&C Little co. Est. 2024</p>
+</ul>  </div>   
+
+<!--<img src="fdg.png" width=800px height=600px>-->
+ 
+<h3 style="font-size: 60px;">For comments or suggestions, email: freezedriedgoodies@proton.me</h3>
+<h3 style="font-size: 60px;">Please give us a 1-10 rating in the email and what we can improve</h3>
+<h3 style="font-size: 40px;">© 2025 by Ab&C Little co. Est. 2024</h3>
 
 <br>
 </div>
